@@ -1,0 +1,90 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title> 登录
+</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+<!--[if IE]>
+<link href="http://u.deepin.org/css/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+<![endif]-->
+<link rel="stylesheet" href="http://u.deepin.org/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="http://u.deepin.org/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="http://u.deepin.org/css/tip.css">
+<link rel="stylesheet" href="{% static 'deepinbbs/css/user/style.css' %}">
+<link rel="stylesheet" href="http://u.deepin.org/css/alert.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://u.deepin.org/js/jquery.min.js"></script>
+<script src="http://u.deepin.org/js/jquery.poshytip.min.js"></script>
+<script src="http://u.deepin.org/js/lang/zh_CN/lang.js"></script>
+<script src="http://u.deepin.org/js/init.js"></script>
+<script src="http://u.deepin.org/js/tip.js"></script>
+<script src="http://u.deepin.org/js/login.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://u.deepin.org/js/bootstrap.min.js"></script>
+</head>
+<style>
+
+</style>
+<body style="background-color: #a9a9a9">
+<div id="top">
+    <div class="container">
+        <ul class="left">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">产品</a></li>
+            <li><a href="#">下载</a></li>
+            <li><a href="#">招聘</a></li>
+            <li><a href="#">社区</a></li>
+        </ul>
+        <div class="right">
+            <ul>
+                <li><a href="#">注册</a></li>
+                <li><a href="#">登录</a></li>
+            </ul>
+            <a class="languages" href="?language=zh_CN">简体中文<span class="i"></span></a>
+            <a class="languages" href="?language=en">English<span class="i"></span></a>
+        </div>
+    </div>
+</div>
+
+<div id="main" class="container">
+    <div class="login">
+    <form action="" method="POST">
+        <div class="title">用户登录</div><div class="msg" id="msg"></div>
+                {% csrf_token %}
+        <input class="txt uname" name="username" placeholder="用户名" type="text" required="required" value="">
+        <input class="txt pwd" name="password" placeholder="密码" type="password" required="required">
+        <input class="txt checkcode" name="captcha" placeholder="验证码" id="captchaCode" type="text" required="required"> <img src="http://u.deepin.org/captcha?765122" class="code" onclick="refreshCode();" alt="Captcha image">
+        <div class="auto">
+            <input type="checkbox" name="login_auto" id="remember">
+            <span>自动登录</span>
+            <a class="forget" href="/password_reset">忘记密码?</a>
+        </div>
+        <input class="btn signin" type="submit" value="登录">
+        <a class="signup" href="/signup">新用户注册</a>
+    </form>
+</div>
+</div>
+<div id="footer">
+    <div class="container">
+        <div class="links">
+            <a href="/">返回首页</a>
+            <a href="?language=zh_CN">简体中文</a>
+            <a href="?language=en">English</a>
+                    </div>
+        <div class="copyright">
+            <span>
+                &copy; 2011-2015 Django Mix inc.
+            </span>
+            <span>
+               Fast Web Development
+            </span>
+        </div>
+    </div>
+</body>
+</html>

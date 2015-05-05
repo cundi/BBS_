@@ -1,0 +1,362 @@
+{% load staticfiles %}
+<body id="nv_forum" class="pg_index" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+
+<div id="wp" class="wp">
+    <div id="pt" class="bm cl" style="display: none;">
+        <div class="z">
+            <a href="../bbs" class="nvhm" title="首页"></a><em>&raquo;</em><a href="#">全部板块</a></div>
+        <div class="z"></div>
+    </div>
+
+
+    <style id="diy_style" type="text/css"></style>
+
+    <div class="wp">
+        <!--[diy=diy1]-->
+        <div id="diy1" class="area"></div>
+        <!--[/diy]-->
+    </div>
+    <div id="ct" class="wp cl">
+        <div id="chart" class="bm bw0 cl" style="display: none">
+            <p class="chart z">今日: <em>0</em><span class="pipe">|</span>昨日: <em>209</em><span class="pipe">|</span>帖子:
+                <em>129263</em><span class="pipe">|</span>会员: <em>30742</em><span class="pipe">|</span>欢迎新会员: <em><a
+                        href="home.php?mod=space&amp;username=koonlamc" target="_blank" class="xi2">koonlamc</a></em>
+            </p>
+
+            <div class="y">
+                <a href="forum.php?mod=guide&amp;view=new" title="最新回复" class="xi2">最新回复</a></div>
+        </div>
+        <div id="chart">
+            <ul>
+                <li>
+                    今日 <br>
+                    <em>
+                        0 </em>
+                </li>
+                <li>
+                    昨日 <br>
+                    <em>
+                        209 </em>
+                </li>
+                <li>
+                    帖子 <br>
+                    <em>
+                        129263 </em>
+                </li>
+                <li class="last">
+                    会员 <br>
+                    <em>
+                        30758 </em>
+                </li>
+            </ul>
+        </div>
+        <!--[diy=diy_chart]-->
+        <div id="diy_chart" class="area"></div>
+        <!--[/diy]-->
+
+
+        <div class="mn">
+
+
+            <div class="fl bm">
+                <div class="bm bmw  flg cl">
+                    <div class="bm_h cl">
+                                    <span class="o">
+                        <img id="category_34_img" src="{% static 'deepinbbs/img/collapsed_no.gif' %}" title="收起/展开"
+                             alt="收起/展开" onclick="toggle_collapse('category_34');"/>
+                    </span>
+
+                        <h2><a href="#" style="">深度乐园</a></h2>
+                    </div>
+                    <div id="category_34" class="bm_c" style="">
+                        <table cellspacing="0" cellpadding="0" class="fl_tb">
+                            <tr>
+                                {% for node in nodes %}
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="#"><img src="" align="left" alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="#">{{ node.title }}</a></dt>
+                                            <dd>聊生活、聊学习、聊一切！</dd>
+                                            <dd><em>主题: 1297</em>, <em>帖数: <span title="11668">1万</span></em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                {% endfor %}
+
+                            </tr>
+                            <tr class="fl_row">
+
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="bm bmw  flg cl">
+                    <div class="bm_h cl">
+                                    <span class="o">
+                        <img id="category_3_img" src="./template/deepin/image/collapsed_no.gif" title="收起/展开"
+                             alt="收起/展开" onclick="toggle_collapse('category_3');"/>
+                    </span>
+
+                        <h2><a href="forum.php?gid=3" style="">社区支持</a></h2>
+                    </div>
+                    <div id="category_3" class="bm_c" style="">
+                        <table cellspacing="0" cellpadding="0" class="fl_tb">
+                            <tr>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=25"><img
+                                                    src="data/attachment/common/8e/common_25_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=25">安装&启动</a></dt>
+                                            <dd>解决安装和系统无法启动的困扰</dd>
+                                            <dd><em>主题: 2359</em>, <em>帖数: <span title="13773">1万</span></em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=6"><img
+                                                    src="data/attachment/common/16/common_6_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=6">系统相关</a></dt>
+                                            <dd>带你探索deepin，解决你的疑惑和问题</dd>
+                                            <dd><em>主题: <span title="10090">1万</span></em>, <em>帖数: <span title="62415">6万</span></em>
+                                            </dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="fl_row">
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=7"><img
+                                                    src="data/attachment/common/8f/common_7_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=7">应用软件</a></dt>
+                                            <dd>软件和游戏等相关软件的讨论</dd>
+                                            <dd><em>主题: 4835</em>, <em>帖数: <span title="26248">2万</span></em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                <td width="49.9%">&nbsp;</td>
+                            </tr>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="bm bmw  flg cl">
+                    <div class="bm_h cl">
+                                    <span class="o">
+                        <img id="category_51_img" src="./template/deepin/image/collapsed_no.gif" title="收起/展开"
+                             alt="收起/展开" onclick="toggle_collapse('category_51');"/>
+                    </span>
+
+                        <h2><a href="forum.php?gid=51" style="">社区协作</a></h2>
+                    </div>
+                    <div id="category_51" class="bm_c" style="">
+                        <table cellspacing="0" cellpadding="0" class="fl_tb">
+                            <tr>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=49"><img
+                                                    src="data/attachment/common/f4/common_49_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=49">社区开发</a></dt>
+                                            <dd>参与deepin的开发，同时欢迎发布你的原创软件</dd>
+                                            <dd><em>主题: 205</em>, <em>帖数: 2315</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=61"><img
+                                                    src="data/attachment/common/7f/common_61_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=61">社区文档</a></dt>
+                                            <dd>参加deepin百科、技巧等文档的撰写工作</dd>
+                                            <dd><em>主题: 1</em>, <em>帖数: 8</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="fl_row">
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=16"><img
+                                                    src="data/attachment/common/c7/common_16_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=16">国际化</a></dt>
+                                            <dd>deepin国际化工作，我们需要你！</dd>
+                                            <dd><em>主题: 57</em>, <em>帖数: 308</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=20"><img
+                                                    src="data/attachment/common/98/common_20_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=20">社区测试</a></dt>
+                                            <dd>参与系统&amp;软件测试活动，贡献你的一份力量</dd>
+                                            <dd><em>主题: 19</em>, <em>帖数: 566</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="bm bmw  flg cl">
+                    <div class="bm_h cl">
+                                    <span class="o">
+                        <img id="category_10_img" src="./template/deepin/image/collapsed_no.gif" title="收起/展开"
+                             alt="收起/展开" onclick="toggle_collapse('category_10');"/>
+                    </span>
+
+                        <h2><a href="forum.php?gid=10" style="">站务区</a></h2>
+                    </div>
+                    <div id="category_10" class="bm_c" style="">
+                        <table cellspacing="0" cellpadding="0" class="fl_tb">
+                            <tr>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=5"><img
+                                                    src="{% static 'deepinbbs/img/common_5_icon.png' %}" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=5">新闻&公告</a></dt>
+                                            <dd>论坛新闻、公告和规则等重要信息。不支持提问！</dd>
+                                            <dd><em>主题: 170</em>, <em>帖数: 4112</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                                <td class="fl_g" width="49.9%">
+                                    <div class="flg_inner">
+                                        <div class="fl_icn_g" style="width: 65px;">
+                                            <a href="forum.php?mod=forumdisplay&fid=14"><img
+                                                    src="/common_14_icon.png" align="left"
+                                                    alt=""/></a></div>
+                                        <dl style="margin-left: 65px;">
+                                            <dt><a href="forum.php?mod=forumdisplay&fid=14">社区建议</a></dt>
+                                            <dd>完善我们的社区，提供你的idea</dd>
+                                            <dd><em>主题: 207</em>, <em>帖数: 1086</em></dd>
+                                            <dd>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="wp mtn">
+                <!--[diy=diy3]-->
+                <div id="diy3" class="area"></div>
+                <!--[/diy]-->
+            </div>
+
+            <div id="online" class="bm oll">
+                <div class="bm_h">
+                    <span class="o"><a href="forum.php?showoldetails=no#online" title="收起/展开"><img
+                            src="./template/deepin/image/collapsed_no.gif" alt="收起/展开"/></a></span>
+
+                    <h3>
+                        <strong><a
+                                href="home.php?mod=space&amp;do=friend&amp;view=online&amp;type=member">在线会员</a></strong>
+                        <span class="xs1">- <strong>8</strong> 人在线
+                        - <strong>3</strong> 会员(<strong>0</strong> 隐身),
+                        <strong>5</strong> 位游客
+                        - 最高记录是 <strong>35</strong> 于 <strong>2015-4-17</strong>.</span>
+                    </h3>
+                </div>
+                <dl id="onlinelist" class="bm_c">
+                    <dt class="ptm pbm bbda"><img src="static/image/common/online_admin.gif"/> 网站管理员 &nbsp; &nbsp;
+                        &nbsp; <img src="static/image/common/online_supermod.gif"/> 官方管理员 &nbsp; &nbsp; &nbsp; <img
+                                src="static/image/common/online_moderator.gif"/> &nbsp; &nbsp; &nbsp; <img
+                                src="static/image/common/online_member.gif"/> 会员 &nbsp; &nbsp; &nbsp; </dt>
+                    <dd class="ptm pbm">
+                        <ul class="cl">
+                            <li title="时间: 00:37">
+                                <img src="static/image/common/online_member.gif" alt="icon"/>
+                                <a href="home.php?mod=space&amp;uid=26824">Tonys</a>
+                            </li>
+                            <li title="时间: 00:31">
+                                <img src="static/image/common/online_member.gif" alt="icon"/>
+                                <a href="home.php?mod=space&amp;uid=20487">Lyvnee</a>
+                            </li>
+                            <li title="时间: 00:27">
+                                <img src="static/image/common/online_member.gif" alt="icon"/>
+                                <a href="home.php?mod=space&amp;uid=29965">chenmi</a>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="bm lk">
+                <div id="category_lk" class="bm_c ptm">
+                    <ul class="m mbn cl">
+                        <li class="lk_logo mbm bbda cl"><img src="static/image/common/logo_88_31.gif" border="0"
+                                                             alt="官方论坛"/>
+
+                            <div class="lk_content z"><h5><a href="http://www.discuz.net" target="_blank">官方论坛</a></h5>
+
+                                <p>提供最新 Discuz! 产品新闻、软件下载与技术交流</p></div>
+                        </li>
+                    </ul>
+                    <ul class="x mbm cl">
+                        <li><a href="http://www.comsenz.com" target="_blank" title="Comsenz">Comsenz</a></li>
+                        <li><a href="http://www.manyou.com/" target="_blank" title="漫游平台">漫游平台</a></li>
+                        <li><a href="http://www.yeswan.com" target="_blank" title="Yeswan">Yeswan</a></li>
+                        <li><a href="http://www.verydz.com/" target="_blank" title="专用主机">专用主机</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>

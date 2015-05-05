@@ -1,0 +1,54 @@
+{% extends 'bar/base.html' %}
+{% load i18n %}
+
+{% block nav_content %}
+    {% include 'common/navbar_content.html' %}
+{% endblock %}
+
+{% block nav_sidebar %}
+    {% include 'bar/nav_sidebar.html' %}
+{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{% trans 'create category' %}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>{% trans 'new Category' %}</strong>
+            </div>
+            <div class="panel-body">
+                <form role="form" method="post" action="{% url 'toolbar:category_create' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>{% trans 'category title' %}</label>
+                                <input class="form-control" name="title" value="{{ category.title }}">
+                            </div>
+                            <div class="form-group">
+                                <label>{% trans 'category description' %}</label>
+                                <textarea class="form-control" name="description" rows="3">{{ category.description }}</textarea>
+                            </div>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+
+                        <!-- /.col-lg-6 (nested) -->
+                    </div>
+                    <!-- /.row (nested) -->
+                    <button type="submit" class="btn btn-danger">{% trans 'submit' %}</button>
+                </form>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock %}

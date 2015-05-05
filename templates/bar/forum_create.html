@@ -1,0 +1,84 @@
+{% extends 'bar/base.html' %}
+{% load staticfiles %}
+
+{% block nav_content %}
+    {% include 'common/navbar_content.html' %}
+{% endblock %}
+
+{% block nav_sidebar %}
+    {% include 'bar/nav_sidebar.html' %}
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">新建分区板块</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <head>
+        <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'froala_editor/css/froala_editor.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'froala_editor/css/froala_style.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'froala_editor/css/froala_content.min.css' %}" rel="stylesheet" type="text/css">
+    </head>
+    <form>
+
+    </form>
+    <script src="{% static 'froala_editor/js/froala_editor.min.js' %}">
+    </script>
+    <script>
+        $(function(){
+            $("#edit").editable({
+                inlineMode: false
+            })
+        })
+    </script>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>新分区板块</strong>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="post" action="{% url 'toolbar:forum_create' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>分区名称</label>
+                                    <input class="form-control" name="title" value="{{ node.title }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>分区所属上级板块</label><br>
+                                    <select id="id_category" name="category">
+                                        <option value selected="selected">---------</option>
+                                        {% if categories >= 1 %}
+                                            {% for category in categories %}
+                                                <option>{{ category.title }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>分区描述</label>
+
+                                    <textarea name="description" id="test" class="form-control">{{ forum.description }}</textarea>
+                                </div>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
+                        <!-- /.row (nested) -->
+                        <button type="submit" class="btn btn-danger">提交</button>
+                    </form>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+{% endblock %}

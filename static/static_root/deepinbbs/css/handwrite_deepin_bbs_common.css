@@ -1,0 +1,56 @@
+    .bm.bmw.cl{
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .bm .bm_h a{
+        display: block;
+        width: 122px;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+        margin:0 0 0 30px;
+    }
+    .fl_icn_g{
+        float: left;
+    }
+    .fl_g dl{
+        padding-left: 16px !important;
+    }
+    .flg_inner dl dt {
+        margin: 0 0 8px 0;
+    }
+    .fl_g dt{
+        font-weight: 700;
+    }
+    *{
+        word-wrap: break-word;
+    }
+    .flg_inner dt a{
+        color: #232A3C;
+        font-size: 18px;
+        text-decoration: none;
+    }
+    .xw0{
+        font-weight: 400;
+    }
+    .xi1{
+        color: #F26C4F;
+    }
+    em{
+        font-style: normal;
+    }
+    .flg_inner dl dd, .flg_inner dl dd em{
+        color: #515D7A;
+        font-size: 12px;
+        line-height: 18px;
+    }
+    body, ul, ol, li, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset, .pr, .pc{
+        margin: 0;
+        padding: 0;
+    }
+    .fl_tb td{
+        padding: 0 10px !important;
+    }
+    .flg {
+        vertical-align: top;
+    }

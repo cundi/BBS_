@@ -1,0 +1,71 @@
+<div class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+
+            <li>
+                <a href="{% url 'toolbar:index' %}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-user fa-fw"></i>用户管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{% url 'toolbar:user_manage' %}"><i class="fa fa-users fa-fw"></i></a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-check-square fa-fw"></i>板块管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{% url 'toolbar:category_manage' %}"><i
+                                class="fa fa-sitemap fa-fw"></i>全部板块</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'toolbar:category_create' %}"><i
+                                class="fa fa-plus fa-fw"></i>板块创建</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-square fa-fw"></i>分区板块管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{% url 'toolbar:forum_manage' %}"><i class="fa fa-sitemap fa-fw"></i>全部分区板块</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'toolbar:forum_create' %}"><i
+                                class="fa fa-plus fa-fw"></i>创建分区板块</a>
+                    </li>
+                    {% if node %}
+                        <li>
+                            <a href="{% url 'toolbar:forum_edit' forum.id %}"><i
+                                    class="fa fa-plus fa-fw"></i>编辑分区板块</a>
+                        </li>
+                    {% else %}
+                        <i class="fa fa-plus fa-fw"></i><a><em style="color: red">没有分区板块，请新建</em></a>
+                    {% endif %}
+
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-comment fa-fw"></i>帖子内容管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="{% url 'toolbar:topic_manage' %}"><i class="fa fa-comments fa-fw"></i>全部帖子</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+
+        </ul>
+        <!-- /#side-menu -->
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>

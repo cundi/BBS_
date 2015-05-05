@@ -1,0 +1,66 @@
+{% extends 'common/base_for_public.html' %}
+
+{% load staticfiles %}
+
+{% block header_ext %}
+        <!-- Include Font Awesome. -->
+    <link href="{% static 'froala_editor/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
+
+    <!-- Include Editor style. -->
+    <link href="{% static 'froala_editor/css/froala_editor.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'froala_editor/css/froala_style.min.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static 'froala_editor/js/froala_editor.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#content').editable({inlineMode: false})
+        });
+        $(document).ready(function(){
+
+        });
+    </script>
+{% endblock %}
+
+{% block nav %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">发新的主题之前请选择板块和子板块</h3>
+            </div>
+
+                <select multiple="multiple">
+                {% for c in categories %}
+                    <option id="cat{{ c.id }}">{{ c }}</option>
+                {% endfor %}
+                </select>
+                {% if cf_list %}
+                <ul>
+                    {% for cf in cf_list %}
+                        <li>{{ cf }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>no cat-f is exist</p>
+                {% endif %}
+
+            <div class="panel-body" style="height: 400px; ">
+                <form role="form" method="post" action="">
+                    {% csrf_token %}
+                    <input type="text" name="title" id="title" placeholder="填写帖子标题">
+                    <br><br>
+                    <textarea id="content" name="content"></textarea>
+                    <button type="submit" class="btn btn-default" id="bt">Preview</button>
+                </form>
+                <div class="btn-group col-sm-2 " style="margin-top: 1px">
+                    <button class="btn btn-info" type="submit">create a now topic</button>
+                </div>
+            </div>
+            <div class="panel-footer">
+                &#9400;2015 MixBBS Power by Django 1.8
+            </div>
+        </div>
+    </div>
+{% endblock %}

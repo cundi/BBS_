@@ -1,0 +1,18 @@
+
+<div id="pt" class="bm cl" style="width: 1160px; margin-left: 91px; margin-right: 20px">
+    <div class="z">
+        <a class="nvhm" title="首页" href="{% url 'bbs:index' %}"></a>
+        <em>, </em>
+        <a href="#">社区支持</a>
+        <!--- 链接插入板块id  -->
+        <em>, </em>
+        <a href="#">系统相关</a>
+         <!-- 插入分区板块id -->
+        <em>, </em>
+        <a href="#">具体话题</a>
+        <!-- 插入topic的id -->
+    </div>
+    <div class="post_new">
+        <a href="{% url 'bbs:pre_create_topic' %}">新帖子</a>
+    </div>
+</div>

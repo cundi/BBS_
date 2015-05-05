@@ -1,0 +1,57 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+
+{% block navbar %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block panel_second_heading %}
+    {% include 'common/second_panel_heading.html' %}
+{% endblock %}
+
+{% block panel_body %}
+    <div class="panel-body" style="height: 1000px;  margin-left: -11px;margin-right: -11px">
+        <div class="bm bmw flg cl">
+            {% for c in categories %}
+            <div class="bm_h cl">
+                <h2>
+                    <a href="#">{{ c }}</a>
+                </h2>
+            </div>
+            <div id="category_" class="bm_c">
+                <table cellpadding="0" cellspacing="0" class="fl_tb">
+                    <tbody>
+                        <tr>
+                            <td class="fl_g" width="49.9%">
+                                <div class="fl_icn_g" style="width: 65px;">
+                                    <a href="#">
+                                        <img src="{% static 'deepinbbs/img/common_25_icon.png' %}" align="left" alt="">
+                                    </a>
+                                </div>
+                                {% for ch in choices %}
+                                <dl style="margin-left: 65px">
+                                    <dt>
+                                        <a href="#">{{ ch }}</a>
+                                        <em class="xw0 xi1" title="">0</em>
+                                    </dt>
+                                    <dd>解决多平台的安装问题</dd>
+                                    <dd>
+                                        <em>
+                                            主题：0 ,
+                                        </em>
+                                        <em>
+                                            帖子数量：
+                                            <span>0</span>
+                                        </em>
+                                    </dd>
+                                </dl>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                       {% endfor %}
+        </div>
+    </div>
+{% endblock %}

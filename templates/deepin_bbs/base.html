@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    {% block head %}
+        {% include 'deepin_bbs/header.html' %}
+    {% endblock %}
+</head>
+<body>
+{% block nav %}
+{% endblock %}
+
+
+
+{% block body %}
+{% block second_nav %}
+{% endblock %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block mask_layer %}
+{% endblock %}
+
+{% block scrolltop %}
+{% endblock %}
+
+</body>
+</html>
