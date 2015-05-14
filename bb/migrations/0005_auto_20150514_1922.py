@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bb', '0001_initial'),
+        ('bb', '0004_remove_category_forum'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='forum',
-            name='created',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='creation date and time'),
+            name='category',
+            field=models.ForeignKey(verbose_name='Category', blank=True, to='bb.Category', null=True),
         ),
     ]

@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.admin.utils import NestedObjects
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from accounts.models import ForumProfile
@@ -66,8 +67,8 @@ def category_view(request, category_id):
 def category_all(request):
     categories = Category.objects.all()
     forums = Forum.objects.all()
-    choices = Category.forums.related.get_choices()
-    ctx = {'categories': categories, 'forums': forums, 'choices': choices}
+    c_forum = [c for c in categories]
+    ctx = {'categories': categories, 'forums': forums, 'cf': c_forum}
     return render(request, 'bbs/category_all.html', ctx)
 
 

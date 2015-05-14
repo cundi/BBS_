@@ -11,13 +11,15 @@
 
 {% block panel_body %}
     <div class="panel-body" style="height: 1000px;  margin-left: -11px;margin-right: -11px">
+        {% for c in cf %}
         <div class="bm bmw flg cl">
-            {% for c in categories %}
             <div class="bm_h cl">
                 <h2>
-                    <a href="#">{{ c }}</a>
+                    <a href="#">{{ c.title }}</a>
                 </h2>
             </div>
+
+
             <div id="category_" class="bm_c">
                 <table cellpadding="0" cellspacing="0" class="fl_tb">
                     <tbody>
@@ -28,10 +30,13 @@
                                         <img src="{% static 'deepinbbs/img/common_25_icon.png' %}" align="left" alt="">
                                     </a>
                                 </div>
-                                {% for ch in choices %}
                                 <dl style="margin-left: 65px">
                                     <dt>
-                                        <a href="#">{{ ch }}</a>
+                                        {% if c.forum_set.all %}
+                                            {% for forum in c.forum_set.all %}
+                                            {{ forum }}
+                                            {% endfor %}
+                                        {% endif  %}
                                         <em class="xw0 xi1" title="">0</em>
                                     </dt>
                                     <dd>解决多平台的安装问题</dd>
@@ -45,13 +50,13 @@
                                         </em>
                                     </dd>
                                 </dl>
-                                {% endfor %}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-                       {% endfor %}
+            {% endfor  %}
+
         </div>
     </div>
 {% endblock %}

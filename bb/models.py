@@ -58,7 +58,7 @@ class Category(models.Model):
 # 2. 话题总数，所有回帖总数
 # 3. 最后一个话题，及其作者、时间
 class Forum(models.Model):
-    category = models.ForeignKey(Category, related_name='forums', verbose_name=_('Category'))
+    category = models.ForeignKey(Category, verbose_name=_('Category'), blank=True, null=True)
     parent = models.ForeignKey('self', related_name='child_forums', verbose_name=_('Parent forum'),
                                blank=True, null=True)
     title = models.CharField(max_length=200)
