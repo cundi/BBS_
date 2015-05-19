@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 import markdown
 
 from utils.bbs_utils import get_delta_time
-
+from DjangoUeditor.models import UEditorField
 
 # 论坛目录结构：
 # 论坛首页展现所有板块和分区板块，每个板块下分为若干话题，
@@ -62,7 +62,7 @@ class Forum(models.Model):
     parent = models.ForeignKey('self', related_name='child_forums', verbose_name=_('Parent forum'),
                                blank=True, null=True)
     title = models.CharField(max_length=200)
-    avatar = models.ImageField(verbose_name='板块头像', upload_to='deepinbbs/img/', blank=True, null=True)
+    avatar = models.ImageField(verbose_name='板块头像', blank=True, null=True)
     description = models.CharField(null=True, blank=True, max_length=300)
     created = models.DateTimeField(verbose_name='creation date and time', auto_now_add=True)
     forum_admin = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name='版主', related_name='manager')
@@ -94,9 +94,11 @@ class Topic(models.Model):
     # 帖子作者
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='topic_user')
     # 该话题所属的哪个分区
-    forum = models.ForeignKey(Forum, verbose_name='Forum of topic')
+    forum = models.ForeignKey(Forum, verbose_name='forum of topic')
     title = models.CharField(max_length=100, null=True, blank=True)
-    content = models.TextField()
+    content = UEditorField(u'内容', width=600, height=300, toolbars="full", imagePath="images/",
+                           filePath="files/", upload_settings={"imageMaxSize":1204000},settings={},command=None, blank=True
+                           )
     content_rendered = models.TextField(blank=True, null=True)
     # 话题查看计数
     view_count = models.IntegerField(default=0)
@@ -148,23 +150,9 @@ class Topic(models.Model):
             new = False
         if not self.content:
             self.content = ''
-        self.content_rendered = markdown.markdown(
-            self.content, ['codehilite'], safe_mode='escape')
         self.reply_count = self.post_set.filter(
             deleted=False).latest('time_created').time_created
         to = []
-        for u in re.findall(r'@(.*?)\s', self.content_rendered):
-            try:
-                user = settings.AUTH_USER_MODEL.objects.get(username=u)
-            except ValueError:
-                pass
-            else:
-                to.append(user)
-                self.content_rendered = re.sub('@%s' % u,
-                                               '@<a href="%s" class="mention"> %s </a>'
-                                               % (reverse('user_info', kwargs={'user_id': user.id}), u),
-                                               self.content_rendered
-                                               )
         super(Topic, self).save(*args, **kwargs)
         if to and new:
             for t in to:
@@ -183,8 +171,9 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts')
     # 被回复的那个帖子
     topic = models.ForeignKey(Topic)
-    content = models.TextField()
-    content_rendered = models.TextField()
+    content = UEditorField(u'内容', width=600, height=300, toolbars="full", imagePath="images/",
+                           filePath="files/", upload_settings={"imageMaxSize":1204000},settings={},command=None, blank=True
+                           )
     time_created = models.DateTimeField(auto_now_add=True, db_index=True)
     updated = models.DateTimeField(
         verbose_name=u'回帖最后编辑时间', blank=True, null=True)

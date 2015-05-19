@@ -73,19 +73,19 @@ def category_all(request):
 
 
 def forum_view(request, forum_id):
-    try:
-        page = request.GET['page']
-    except ValueError:
-        page = None
-    if page == '1':
-        page = None
+    # try:
+    #     page = request.GET['page']
+    # except ValueError:
+    #     page = None
+    # if page == '1':
+    #     page = None
     forum = Forum.objects.get(id=forum_id)
     topics = Topic.objects.filter(forum=forum, deleted=False)
     ctx = {
         'topics': topics,
-        'Forum': Forum,
-        'Forum_view': True,
-        'page': page
+        'forum': forum,
+        'forum_view': True,
+        # 'page': page
     }
     return render(request, 'bbs/forum_view.html', ctx)
 
@@ -182,7 +182,7 @@ def create_topic(request, forum_id):
     if request.method == 'GET':
         ctx = {'Forum': forum,'title': 'create_new_topic'}
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('sign_in'))
+            return HttpResponseRedirect(reverse('bbs:sign_in'))
         return render(request, 'bbs/create_topic.html', ctx)
     elif request.method == 'POST':
         topic = Topic()

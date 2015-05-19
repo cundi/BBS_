@@ -43,10 +43,8 @@ INSTALLED_APPS = (
     'tool_bar',
     'pagination',
     'django_wysiwyg',
-    'ckeditor',
-    'mptt',
+    'DjangoUeditor',
     'templatetags',
-    'django_mptt_admin',
 )
 
 MIDDLEWARE_CLASSES = (

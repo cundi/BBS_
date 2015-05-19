@@ -1,104 +1,34 @@
-{% load staticfiles %}
+{% extends 'common/base.html' %}
 
+{% block navbar %}
+{% include 'common/navbar.html' %}
+{% endblock %}
 
-<style>
+{% block panel_heading %}
+    {% include 'common/panel_heading.html' %}
+{% endblock %}
 
-</style>
+{% block panel_body %}
+    {% if category_single %}
+    <div class="panel-body">
+        <p><a href="{% url 'bbs:category_view' category_single.id %}">{{ category_single.title }}</a></p>
 
-<div id="wp" class="wp">
-    <div id="pt" class="bm cl" style="display: none">
-        <div class="z">
-            <a href="./" class="nvhm" type="首页"></a>
-            <em>》</em>
-            <a href="#">全部板块</a>
-        </div>
-        <div class="z"></div>
+        <!-- Table -->
+        <table class="table table-hover">
+
+            {% for forum in category_single.forum_set.all %}
+            <tbody>
+               <tr>
+                   <td><a href="{% url 'bbs:forum_view' forum.id %}"><img src="/media/{{ forum.avatar }}" align="left"></a></td>
+                   <td><a href="{% url 'bbs:forum_view' forum.id %}">{{ forum }}</a></td>
+               </tr>
+            </tbody>
+            {% endfor %}
+        </table>
     </div>
-    <style id="diy_style" type="text/css"></style>
-    <div class="wp">
-        <!--[diy=diy1-->
-        <div id="diy1" class="area"></div>
-        <!--[/diy]-->
-    </div>
-    <div id="ct" class="wp cl">
-        <div id="chart" class="bm bw0 cl" style="display: none">
-            <p class="chart z">
-                今日：
-                <em>0</em>
-                <span class="pipe">|</span>
-                昨日：
-                <em>209</em>
-                <span class="pipe">|</span>
-                帖子：
-                <em>1298383</em>
-                <span class="pipe">|</span>
-                会员：
-                <em>2030</em>
-                <span class="pipe">|</span>
-                欢迎新会员：
-                <em>
-                    <a href="#" target="_blank" class="xi2">Jack</a>
-                </em>
-            </p>
+    {% endif %}
+{% endblock %}
 
-            <div class="y">
-                <a href="#" title="最新回复" class="xi2">最新回复</a>
-            </div>
-        </div>
-        <div id="chart">
-            <ul>
-                <li></li>
-            </ul>
-        </div>
-        <div class="mn">
-            <div class="fl bm">
-                <div class="bm bmw flg cl">
-                    <div class="bm_h cl">
-                <span class="o">
-                    <img id="category_34_img" src="{% static 'images/../../static/static_files/deepinbbs/img/collapsed_no.gif' %}" title="收起/展开"
-                         alt="收起/展开" onclick="toggle_collapse('category_34')">
-                </span>
-                    </div>
-                    {% for category in categories %}
-                        <a href="{% url 'bbs:category_single' category.id %}">{{ category.title }}</a>
-                    {% endfor %}
-                </div>
-                <div id="category_34" class="bm_c">
-                    <table cellspacing="0" cellpadding="0" class="fl_tb">
-                        <tbody>
-                        <tr>
-                            <td class="fl_g" width="49.9%">
-                                <div class="flg_inner">
-                                    <div class="fl_icn_g" style="width: 65px;">
-                                        {% if node_single %}
-                                            <a href="{% url 'bbs:node_single' node_single.id %}">
-                                        {% endif %}
-                                        <img src="{% static 'images/../../static/static_files/deepinbbs/img/common_36_icon.png' %}">
-                                        </a>
-                                    </div>
-                                    <dl style="margin-left: 65px">
-                                        <dt>
-                                            {% for node in nodes %}
-                                                <a href="{% url 'bbs:node_single' node.id %}">{{ node.title }}</a>
-                                                <em class="xw0" title="今日"><span class="xi1">({{ topics_count }})</span></em>
-                                                <dd>{{ node.decription }}</dd>
-                                                <dd>
-                                                    <em>主题：{{ topics_count }}</em>
-                                                    ，
-                                                    <em>
-                                                        贴子数量：<span title="11664">{{ posts_count }}</span>
-                                                    </em>
-                                                </dd>
-                                            {% endfor %}
-                                        </dt>
-                                    </dl>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% block panel_footer %}
+    {% include 'common/footer.html' %}
+{% endblock %}
