@@ -12,7 +12,6 @@
 {% block panel_body %}
     <div class="panel-body" style="height: 1000px;  margin-left: -11px;margin-right: -11px">
         {% for c in cf %}
-        {% if c.forum_set.all %}
         <div class="bm bmw flg cl">
             <div class="bm_h cl">
                 <h2>
@@ -34,17 +33,18 @@
                                 <dl style="margin-left: 65px">
                                     <dt>
                                         <a href="{% url 'bbs:forum_view' forum.id %}">{{ forum }}</a>
-                                        <em class="xw0 xi1" title="">0</em>
+                                        <em class="xw0 xi1" title="">{{  }}</em>
                                     </dt>
-                                    <dd>解决多平台的安装问题</dd>
+                                    <dd>{{ forum.description }}</dd>
                                     <dd>
                                         <em>
                                             主题：0 ,
                                         </em>
                                         <em>
                                             帖子数量：
-                                            <span>0</span>
+                                            <span>0, </span>
                                         </em>
+                                        <em>点击数: <span></span></em>
                                     </dd>
                                 </dl>
                             </td>
@@ -52,8 +52,9 @@
                     </tbody>
                 </table>
             </div>
+            {% empty %}
+                <p>请检查，没有关联到category的forum外键</p>
             {% endfor %}
-        {% endif  %}
         {% endfor  %}
         </div>
     </div>

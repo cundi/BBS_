@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from accounts.models import ForumProfile
 from .models import Forum, Topic, Post, Category, Appendix
-from .forms import ImageUploadForm
+from .forms import ImageUploadForm, TopicUEditorForm, PostReplyForm
 import json
 import operator
 
@@ -73,19 +73,12 @@ def category_all(request):
 
 
 def forum_view(request, forum_id):
-    # try:
-    #     page = request.GET['page']
-    # except ValueError:
-    #     page = None
-    # if page == '1':
-    #     page = None
     forum = Forum.objects.get(id=forum_id)
     topics = Topic.objects.filter(forum=forum, deleted=False)
     ctx = {
         'topics': topics,
         'forum': forum,
         'forum_view': True,
-        # 'page': page
     }
     return render(request, 'bbs/forum_view.html', ctx)
 
@@ -97,57 +90,53 @@ def forum_list(request):
 
 def forum_topics(request, forum_id):
     forum = Forum.objects.get(id=forum_id)
-    topics = Forum.topic_set.all()           # 列出当前单个分区下属的帖子，而不是所有分区的全部帖子
-    ctx = {'Forum': forum,
+    topics = forum.topic_set.all()           # 列出当前单个分区下属的帖子，而不是所有分区的全部帖子
+    ctx = {'forum': forum,
            'topics': topics
            }
     return render(request, 'widget/forum_topic_list.html', ctx)
 
 
 def forums_topics(request):
-    f_topics = Forum.objects.all()          # 所有分区的所有帖子
-    return render(request, 'bbs/forums_topic_all.html', {'f_topics': f_topics})
+    forums = Forum.objects.all()          # 所有分区的所有帖子
+    return render(request, 'bbs/forums_topic_all.html', {'forums': forums,})
 
 
 def topic_view(request, topic_id):
     """ view single topic """
+    form = PostReplyForm()
     topic = Topic.objects.get(id=topic_id)
     topic.view_count += 1
     topic.save()
     t_forum = topic.forum
     posts = topic.post_set.filter(deleted=False)
-    try:
-        page = request.GET['page']
-    except ValueError:
-        page = None
-    if page == '1':
-        page = None
+    # try:
+    #     page = request.GET['page']
+    # except ValueError:
+    #     page = None
+    # if page == '1':
+    #     page = None
     ctx = {'topic': topic,
            't_Forum': t_forum,
-           'page': page,
+           'form': form,
+           # 'page': page,
            'posts': posts
            }
     return render(request, 'bbs/topic.html', ctx)
 
 
 def create_topic_reply(request, topic_id):
-    msg = []
     if request.method == 'POST':
         topic = Topic.objects.get(id=topic_id)
         reply = Post()
         # 回帖所属的那个帖子
         reply.topic = topic
-        if request.POST['content']:
-            reply.content = request.POST['content']
-        else:
-            msg.append('content cannot be empty')
-            return render(request, 'bbs/topic.html', {'msg': msg})
+        reply.content = request.POST['Content']
         reply.user = request.user
         reply.save()
-        return HttpResponseRedirect(reverse('topic_view_count', kwargs={'topic_id': topic_id}))
+        return HttpResponseRedirect(reverse('topic_view', kwargs={'topic_id': topic_id}))
     elif request.method == 'GET':
-        msg.append('did not get stuff')
-        return render(request, 'bbs/topic.html', {'msg': msg})
+        return render(request, 'bbs/topic.html')
 
 
 @staff_member_required
@@ -164,13 +153,16 @@ def delete_topic_reply(request, post_id):
 def pre_create_topic(request):
     cf_list = []
     categories = Category.objects.all()
+    form = TopicUEditorForm()
     for c in categories:
         for ca in c.forum_set.all():
             cf_list.append(str(ca))
     ctx = {
         'categories': categories,
         'cf_list': cf_list,
+        'form': form
     }
+
     if not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('user:sign_in',))
     return render(request, 'bbs/pre_topic.html', ctx)
@@ -180,21 +172,29 @@ def create_topic(request, forum_id):
     forum = Forum.objects.get(id=forum_id)
     msg = []
     if request.method == 'GET':
-        ctx = {'Forum': forum,'title': 'create_new_topic'}
+        form = TopicUEditorForm(initial={'content': u'测试'})
+        ctx = {'forum': forum,'title': 'create_new_topic', 'form': form}
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('bbs:sign_in'))
         return render(request, 'bbs/create_topic.html', ctx)
     elif request.method == 'POST':
         topic = Topic()
-        topic.content = request.POST.get('content')
-        topic.forum = forum
-        topic.title = request.POST['title']
+        form = TopicUEditorForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['Content']
+            name = form.cleaned_data['Name']
+            user = request.user
+            topic.content = content
+            topic.title = name
+            topic.forum = forum
+            topic.author = user
+            topic.save()
         if not topic.title:
             msg.append('title cannot be empty')
             return render(request, 'bbs/create_topic.html', {'msg': msg})
         if not request.user.is_authenticated():
             return site_error(request, 'please login', reverse('sign_in'))
-        return HttpResponseRedirect(reverse('bbs:list_topics', kwargs={'Forum_id': forum_id}))
+        return HttpResponseRedirect(reverse('bbs:forum_topic_all', kwargs={'forum_id': forum_id}))
 
 
 def delete_topic(request, topic_id):

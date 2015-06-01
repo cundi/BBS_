@@ -1,0 +1,54 @@
+{% extends 'common/base.html' %}
+
+{% block header_ext %}
+    {{ form.media }}
+{% endblock %}
+
+{% block navbar %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block panel_heading %}
+    {% include 'common/panel_heading.html' %}
+{% endblock %}
+
+
+{% block panel_body %}
+    <div class="panel-body" style="margin-left: -11px;margin-right: -11px">
+        <div>
+            {% if topic %}
+                <table>
+                    <thead>
+                        发帖内容： {{ topic.content.title }}
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>作者：{{ topic.author }}</td>
+                        </tr>
+                        <tr>
+                            <td>发帖时间：{{ topic.time_created }}</td>
+                        </tr>
+                        <tr>
+                            <td>阅读次数：{{ topic.view_count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block panel_paganation %}
+    <div class="panel-footer" style="background-color: #f5f7fa">
+        <form method="post" action="{% url 'bbs:create_topic_reply' topic.id %}">
+            {% csrf_token %}
+             {{ form.as_p}}
+            <button class="btn btn-info" type="submit">create a now topic</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block panel_footer %}
+    {% include 'common/footer.html' %}
+{% endblock %}

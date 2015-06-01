@@ -43,11 +43,10 @@
                 <th></th>
             </tr>
             </thead>
-
                 {% for t in forum.topic_set.all %}
-            <tbody style="">
+            <tbody>
             <tr>
-                <td>{{ t.title }}</td>
+                <td><a href="{% url 'bbs:topic_view' t.id %}">{{ t.title }}</a></td>
             </tr>
             </tbody>
                 {% endfor %}

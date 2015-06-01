@@ -65,7 +65,7 @@ class Forum(models.Model):
     avatar = models.ImageField(verbose_name='板块头像', blank=True, null=True)
     description = models.CharField(null=True, blank=True, max_length=300)
     created = models.DateTimeField(verbose_name='creation date and time', auto_now_add=True)
-    forum_admin = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, verbose_name='版主', related_name='manager')
+    forum_admin = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, verbose_name='版主', related_name='manager')
     post_count = models.IntegerField(_('回帖计数'), blank=True, default=0)
     topic_count = models.IntegerField(_('帖子计数'), blank=True, default=0)
     hidden = models.BooleanField(_('分区是否隐藏'), blank=False, null=False, default=False)
@@ -82,6 +82,7 @@ class Forum(models.Model):
         return sum([t.sum_topics() for t in self.topic_set.all()])
 
     # 最后即最新被回复的帖子
+    @staticmethod
     def last_topic(self):
         try:
             return self.topic_set.order_by('-created', '-id')[0]
@@ -97,7 +98,8 @@ class Topic(models.Model):
     forum = models.ForeignKey(Forum, verbose_name='forum of topic')
     title = models.CharField(max_length=100, null=True, blank=True)
     content = UEditorField(u'内容', width=600, height=300, toolbars="full", imagePath="images/",
-                           filePath="files/", upload_settings={"imageMaxSize":1204000},settings={},command=None, blank=True
+                           filePath="files/", upload_settings={"imageMaxSize": 1204000},settings={},command=None,
+                           blank=True
                            )
     content_rendered = models.TextField(blank=True, null=True)
     # 话题查看计数
@@ -143,27 +145,6 @@ class Topic(models.Model):
         if self.user == user:
             Topic.objects.filter(replys=self).update(is_read=True)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            new = True
-        else:
-            new = False
-        if not self.content:
-            self.content = ''
-        self.reply_count = self.post_set.filter(
-            deleted=False).latest('time_created').time_created
-        to = []
-        super(Topic, self).save(*args, **kwargs)
-        if to and new:
-            for t in to:
-                m = Mention()
-                m.sender = self.user
-                m.receiver = t
-                m.post = self
-                m.topic = self.topic
-                m.save()
-        self.topic.save()
-
 
 # 对话题（帖子）的回复，即回帖
 class Post(models.Model):
@@ -171,7 +152,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts')
     # 被回复的那个帖子
     topic = models.ForeignKey(Topic)
-    content = UEditorField(u'内容', width=600, height=300, toolbars="full", imagePath="images/",
+    content = UEditorField(width=600, height=300, toolbars="full", imagePath="images/",
                            filePath="files/", upload_settings={"imageMaxSize":1204000},settings={},command=None, blank=True
                            )
     time_created = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -187,40 +168,6 @@ class Post(models.Model):
 
     def __unicode__(self):
         return str(self.id) + self.topic.title
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            new = True
-        else:
-            new = False
-        if not self.content:
-            self.content = ''
-        self.content_rendered = markdown.markdown(self.content, ['codehilite'],
-                                                  safe_mode='escape')
-        to = []
-        for u in re.findall(r'@(.*?)\s', self.content_rendered):
-            try:
-                user = settings.AUTH_USER_MODEL.objects.get(username=u)
-            except ValueError:
-                pass
-            else:
-                to.append(user)
-                self.content_rendered = re.sub('@%s' % u,
-                                               '@<a href="%s" class="mention">%s</a>'
-                                               % (reverse('user_info',
-                                                          kwargs={'user_id': user.id}),
-                                                  u),
-                                               self.content_rendered)
-        super(Post, self).save(*args, **kwargs)
-        if to and new:
-            for t in to:
-                m = Mention()
-                m.sender = self.user
-                m.receiver = t
-                m.post = self
-                m.topic = self.topic
-                m.save()
-        self.topic.save()
 
 
 class Notification(models.Model):

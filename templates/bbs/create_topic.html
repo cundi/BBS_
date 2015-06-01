@@ -1,24 +1,9 @@
 {% extends 'common/base.html' %}
-{% load i18n %}
-{% load staticfiles %}
-<htmL>
 
+{% load staticfiles %}
 
 {% block header_ext %}
-    <!-- Include Font Awesome. -->
-    <link href="{% static 'froala_editor/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
-
-    <!-- Include Editor style. -->
-    <link href="{% static 'froala_editor/css/froala_editor.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'froala_editor/css/froala_style.min.css' %}" rel="stylesheet" type="text/css"/>
-{#    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">#}
-{#    <script src="{% static 'js/jquery.min.js' %}"></script>#}
-{#    <script src="{% static 'froala_editor/js/froala_editor.min.js' %}"></script>#}
-    <script>
-        $(function () {
-            $('#content').editable({inlineMode: false})
-        });
-    </script>
+    {{ form.media }}
 {% endblock %}
 
 {% block navbar %}
@@ -30,9 +15,9 @@
         <h3 class="panel-title">版面导航</h3>
         <a href="{% url 'bbs:index' %}">首页</a>
         <em>> </em>
-        <a href="{% url 'bbs:forums_topics' %}">帖子</a>
+        <a href="{% url 'bbs:category_view' forum.category_id  %}">{{ forum.category.title }}</a>
         <em>> </em>
-        <a href="{% url 'bbs:category_all' %}">全部板块</a>
+        <a href="{% url 'bbs:forum_view' forum.id %}">{{ forum.title }}</a>
     </div>
 {% endblock %}
 
@@ -47,17 +32,12 @@
             {% endfor %}
         </div>
     {% endif %}
-
-    <div style="margin-top: 90px">
-        <form id="froala" method="post" action="{% if forum %}{% url 'bbs:create_topic' forum.id %}{% endif %}">
-            {% csrf_token %}
-            <label>add topic title</label>
-            <input type="text" name="title" id="title">
-            <br>
-            <textarea id="content" name="content"></textarea>
-            <button type="submit" class="btn btn-default" id="bt"></button>
+    <div class="edit-area">
+        <form>
+            {{ form.as_p }}
+            <button class="btn btn-default" type="submit">submit</button>
         </form>
     </div>
-
-
 {% endblock %}
+
+
