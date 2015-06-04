@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block panel_heading %}
-    {% if forum %}
         <div class="panel-heading" style="height: 79px">
             <h3 class="panel-title">版面导航</h3>
             <a href="{% url 'bbs:index' %}">首页</a>
@@ -18,7 +17,6 @@
             <a id="post_topic" href="{% url 'bbs:create_topic' forum.id %}">发新贴</a>
         </span>
         </div>
-    {% endif %}
 {% endblock %}
 
 {% block panel_second_heading %}
@@ -46,7 +44,7 @@
                 {% for t in forum.topic_set.all %}
             <tbody>
             <tr>
-                <td><a href="{% url 'bbs:topic_view' t.id %}">{{ t.title }}</a></td>
+                <td><a href="{% url 'bbs:topic_view'  t.id  %}">{{ t.title }}</a></td>
             </tr>
             </tbody>
                 {% endfor %}

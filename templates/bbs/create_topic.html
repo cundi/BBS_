@@ -33,7 +33,8 @@
         </div>
     {% endif %}
     <div class="edit-area">
-        <form>
+        <form method="post" action="{% url 'bbs:create_topic' forum.id %}">
+            {% csrf_token %}
             {{ form.as_p }}
             <button class="btn btn-default" type="submit">submit</button>
         </form>

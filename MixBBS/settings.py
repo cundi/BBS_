@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django_wysiwyg',
     'DjangoUeditor',
     'templatetags',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -125,10 +126,10 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static', 'static_files'),)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 MEDIA_URL = '/media/'
-# for ckeditor
-DJANGO_WYSIWYG_FLAVOR = "ckeditor"
-
-CKEDITOR_UPLOAD_PATH = "uploads/"
+# # for ckeditor
+# DJANGO_WYSIWYG_FLAVOR = "ckeditor"
+#
+# CKEDITOR_UPLOAD_PATH = "uploads/"
 
 
 MAX_UPLOAD_SIZE = "524288"

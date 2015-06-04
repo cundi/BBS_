@@ -78,7 +78,6 @@ def forum_view(request, forum_id):
     ctx = {
         'topics': topics,
         'forum': forum,
-        'forum_view': True,
     }
     return render(request, 'bbs/forum_view.html', ctx)
 
@@ -110,16 +109,9 @@ def topic_view(request, topic_id):
     topic.save()
     t_forum = topic.forum
     posts = topic.post_set.filter(deleted=False)
-    # try:
-    #     page = request.GET['page']
-    # except ValueError:
-    #     page = None
-    # if page == '1':
-    #     page = None
     ctx = {'topic': topic,
-           't_Forum': t_forum,
+           't_forum': t_forum,
            'form': form,
-           # 'page': page,
            'posts': posts
            }
     return render(request, 'bbs/topic.html', ctx)
@@ -134,7 +126,7 @@ def create_topic_reply(request, topic_id):
         reply.content = request.POST['Content']
         reply.user = request.user
         reply.save()
-        return HttpResponseRedirect(reverse('topic_view', kwargs={'topic_id': topic_id}))
+        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic_id}))
     elif request.method == 'GET':
         return render(request, 'bbs/topic.html')
 
@@ -182,6 +174,7 @@ def create_topic(request, forum_id):
         form = TopicUEditorForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['Content']
+            print content
             name = form.cleaned_data['Name']
             user = request.user
             topic.content = content
