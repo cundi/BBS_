@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from django import forms
 from DjangoUeditor.forms import UEditorWidget
+from DjangoUeditor.models import UEditorField
+from .models import Post
 
 
 class ImageUploadForm(forms.Form):
@@ -17,6 +19,6 @@ class TopicUEditorForm(forms.Form):
 
 class PostReplyForm(forms.Form):
     Content = forms.CharField(
-                              widget=UEditorWidget({'width': 600, 'height': 300, 'imagePath': 'images/',
-                                                    'filePath': 'files/'})
-                              )
+        widget=UEditorWidget({'width': 600, 'height': 300, 'imagePath': 'images/',
+                              'filePath': 'files/'})
+    )
