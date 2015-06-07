@@ -9,6 +9,7 @@ class Category(models.Model):
     description = models.TextField()
 
     class Meta:
+        ordering = ['title']                # 按照Category实例的title属性的值从a-z排列这些值
         verbose_name_plural = "Categories"
 
     def __unicode__(self):
