@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('nickname', models.CharField(max_length=12, null=True, blank=True)),
                 ('user_avatar', models.BooleanField(default=True)),
-                ('avatar_img', models.ImageField(default='avatar/d_avatar.png', null=True, upload_to='avatar', blank=True)),
+                ('avatar_img', models.ImageField(default='avatar/d_avatar.png', null=True, upload_to='avatar/', blank=True)),
                 ('description', models.TextField(null=True, blank=True)),
                 ('address', models.CharField(max_length=50, null=True, blank=True)),
                 ('phone', models.CharField(max_length=11, null=True, blank=True)),

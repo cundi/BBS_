@@ -25,9 +25,9 @@
             </thead>
             <tbody style="">
             {% for lt in last_replied_topics %}
-            <tr>
-                <td><a href="{% url 'bbs:topic_view' lt.id %}">{{ lt.title }}</a></td>
-            </tr>
+                <tr>
+                    <td><a href="{% url 'bb:topic_view' lt.id %}">{{ lt.title }}</a>| {{ lt.author }} |</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

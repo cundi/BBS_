@@ -1,18 +1,28 @@
 # coding: utf-8
 from __future__ import unicode_literals
+import json
+import operator
+import datetime
+
 from django.shortcuts import render
-# from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test, login_required
-from django.contrib.admin.utils import NestedObjects
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+
 from accounts.models import ForumProfile
 from .models import Forum, Topic, Post, Category, Appendix
 from .forms import ImageUploadForm, TopicUEditorForm, PostReplyForm
-import json
-import operator
+
+
+today = datetime.date.today()
+today_tc = Topic.objects.filter(time_created__day=today.day).count()
+yesterday_tc = Topic.objects.filter(time_created__day=today.day - 1).count()
+categories = Category.objects.all()
+forums = Forum.objects.all()
+forum = Forum()
+users_count = ForumProfile.objects.count()
+posts_count = Post.objects.count()
 
 
 def site_error(request, msg, back=None):
@@ -33,16 +43,10 @@ def preview(request):
 
 
 def index(request):
-    categories = Category.objects.all()
-    forums = Forum.objects.all()
-    users_count = ForumProfile.objects.count()
-    topics_count = Topic.objects.count()
-    posts_count = Post.objects.count()
-
     last_topics_list = Topic.objects.all().filter(deleted=False).order_by('-last_replied_time')[0:30]
     post_list_name = 'last topics'
     ctx = {'last_replied_topics': last_topics_list, 'post_name': post_list_name, 'Forums': forums,
-           'users_count': users_count, 'topics_count': topics_count,
+           'users_count': users_count, 'today_topics_count': today_tc, 'yesterday_topics_count': yesterday_tc,
            'categories': categories, 'posts_count': posts_count,
            }
     return render(request, 'common/index.html', ctx)
@@ -61,15 +65,18 @@ def upload_pic(request, pk):
 
 def category_view(request, category_id):
     category = Category.objects.get(id=category_id)
-    return render(request, 'widget/categories.html', {'category_single': category})
+    ctx = {
+        'category_single': category, 'today_topics_count': today_tc, 'yesterday_topics_count': yesterday_tc,
+    }
+    return render(request, 'widget/categories.html',ctx)
 
 
 def category_all(request):
-    categories = Category.objects.all()
-    forums = Forum.objects.all()
     c_forum = [c for c in categories]
-    ctx = {'categories': categories, 'forums': forums, 'cf': c_forum}
-    return render(request, 'bbs/category_all.html', ctx)
+    ctx = {
+        'categories': categories, 'forums': forums, 'cf': c_forum,
+    }
+    return render(request, 'bb/category_all.html', ctx)
 
 
 def forum_view(request, forum_id):
@@ -79,12 +86,12 @@ def forum_view(request, forum_id):
         'topics': topics,
         'forum': forum,
     }
-    return render(request, 'bbs/forum_view.html', ctx)
+    return render(request, 'bb/forum_view.html', ctx)
 
 
 def forum_list(request):
     forums = Forum.objects.all()            # 所有存在的分区都列出
-    return render(request, 'bbs/forum_all.html', {'forums': forums})
+    return render(request, 'bb/forum_all.html', {'forums': forums})
 
 
 def forum_topics(request, forum_id):
@@ -98,7 +105,7 @@ def forum_topics(request, forum_id):
 
 def forums_topics(request):
     forums = Forum.objects.all()          # 所有分区的所有帖子
-    return render(request, 'bbs/forums_topic_all.html', {'forums': forums,})
+    return render(request, 'bb/forums_topic_all.html', {'forums': forums})
 
 
 def topic_view(request, topic_id):
@@ -114,7 +121,7 @@ def topic_view(request, topic_id):
            'form': form,
            'posts': posts
            }
-    return render(request, 'bbs/topic.html', ctx)
+    return render(request, 'bb/topic.html', ctx)
 
 
 def create_topic_reply(request, topic_id):
@@ -126,9 +133,15 @@ def create_topic_reply(request, topic_id):
         reply.content = request.POST['Content']
         reply.user = request.user
         reply.save()
-        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic_id}))
+        # 帖自被回复的时间就等于reply的创建时间
+        topic.last_replied_time = reply.time_created
+        topic.save()
+        # 当前论坛的回帖总数
+        forum.post_count += 1
+        forum.save()
+        return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': topic_id}))
     elif request.method == 'GET':
-        return render(request, 'bbs/topic.html')
+        return render(request, 'bb/topic.html')
 
 
 @staff_member_required
@@ -139,7 +152,7 @@ def delete_topic_reply(request, post_id):
     post.deleted = True
     post.save()
     post.topic.save()
-    return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': t_id}))
+    return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': t_id}))
 
 
 def pre_create_topic(request):
@@ -157,7 +170,7 @@ def pre_create_topic(request):
 
     if not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('user:sign_in',))
-    return render(request, 'bbs/pre_topic.html', ctx)
+    return render(request, 'bb/pre_topic.html', ctx)
 
 
 def create_topic(request, forum_id):
@@ -165,10 +178,10 @@ def create_topic(request, forum_id):
     msg = []
     if request.method == 'GET':
         form = TopicUEditorForm(initial={'content': u'测试'})
-        ctx = {'forum': forum,'title': 'create_new_topic', 'form': form}
+        ctx = {'forum': forum, 'title': 'create_new_topic', 'form': form}
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('bbs:sign_in'))
-        return render(request, 'bbs/create_topic.html', ctx)
+            return HttpResponseRedirect(reverse('bb:sign_in'))
+        return render(request, 'bb/create_topic.html', ctx)
     elif request.method == 'POST':
         topic = Topic()
         form = TopicUEditorForm(request.POST)
@@ -182,54 +195,56 @@ def create_topic(request, forum_id):
             topic.forum = forum
             topic.author = user
             topic.save()
+            forum.topic_count += 1
+            forum.save()
         if not topic.title:
             msg.append('title cannot be empty')
-            return render(request, 'bbs/create_topic.html', {'msg': msg})
+            return render(request, 'bb/create_topic.html', {'msg': msg})
         if not request.user.is_authenticated():
             return site_error(request, 'please login', reverse('sign_in'))
-        return HttpResponseRedirect(reverse('bbs:forum_topic_all', kwargs={'forum_id': forum_id}))
+        return HttpResponseRedirect(reverse('bb:forum_topic_all', kwargs={'forum_id': forum_id}))
 
 
 def delete_topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     if request.user != topic.author and not request.user.is_superuser:
-        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic.id}))
+        return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': topic.id}))
     t_forum_id = topic.forum.id
     topic.deleted = True
     topic.save()
-    return HttpResponseRedirect(reverse('bbs:Forum_view', kwargs={'Forum_id': t_forum_id}))
+    return HttpResponseRedirect(reverse('bb:Forum_view', kwargs={'Forum_id': t_forum_id}))
 
 
 def edit_topic(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     if request.user != topic.author and not request.user.is_superuser:
-        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic.id}))
+        return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': topic.id}))
     if request.method == 'GET':
-        return render(request, 'bbs/edit_topic.html', {'topic': topic})
+        return render(request, 'bb/edit_topic.html', {'topic': topic})
     elif request.method == 'POST':
         topic.title = request.POST['title']
         topic.content = request.POST['content']
         if not topic.title:
-            return render(request, 'bbs/edit_topic.html', {'error': 'title cannot be empty'}, )
+            return render(request, 'bb/edit_topic.html', {'error': 'title cannot be empty'}, )
         topic.save()
-        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic.id}))
+        return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': topic.id}))
 
 
 def add_appendix(request, topic_id):
     topic = Topic.objects.get(id=topic_id)
     t_n = Topic.Forum
     if request.user != topic.user:
-        return render(request, 'bbs/appendix.html', {'error': 'you cannot add appendix to others'})
+        return render(request, 'bb/appendix.html', {'error': 'you cannot add appendix to others'})
     if request.method == 'GET':
-        return render(request, 'bbs/appendix.html', {'Forum': t_n, 'topic': topic})
+        return render(request, 'bb/appendix.html', {'Forum': t_n, 'topic': topic})
     elif request.method == 'POST':
         appendix = Appendix()
         appendix.content = request.POST['content']
         if not appendix.content:
-            return render(request, 'bbs/appendix.html', {'error': 'content cannot be empty'})
+            return render(request, 'bb/appendix.html', {'error': 'content cannot be empty'})
         appendix.topic = topic
         appendix.save()
-        return HttpResponseRedirect(reverse('bbs:topic_view', kwargs={'topic_id': topic.id}))
+        return HttpResponseRedirect(reverse('bb:topic_view', kwargs={'topic_id': topic.id}))
 
 
 def search(request, kw):
@@ -248,7 +263,7 @@ def search(request, kw):
         'topics': topics,
         'post_list_title': 'search %s' % k
     }
-    return render(request, 'bbs/index.html', ctx)
+    return render(request, 'bb/index.html', ctx)
 
 
 def recent(request):
@@ -263,4 +278,4 @@ def recent(request):
         'topics': topics,
         'pager': page,
     }
-    return render(request, 'bbs/index.html', ctx)
+    return render(request, 'bb/index.html', ctx)

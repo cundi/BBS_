@@ -1,0 +1,44 @@
+{% extends 'common/base.html' %}
+
+{% load staticfiles %}
+
+{% block header_ext %}
+    {{ form.media }}
+{% endblock %}
+
+{% block navbar %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block panel_heading %}
+    <div class="panel-heading" style="height: 79px">
+        <h3 class="panel-title">版面导航</h3>
+        <a href="{% url 'bb:index' %}">首页</a>
+        <em>> </em>
+        <a href="{% url 'bb:category_view' forum.category_id  %}">{{ forum.category.title }}</a>
+        <em>> </em>
+        <a href="{% url 'bb:forum_view' forum.id %}">{{ forum.title }}</a>
+    </div>
+{% endblock %}
+
+
+{% block panel_body %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p class="text-{{ message.tags }}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="edit-area">
+        <form method="post" action="{% url 'bb:create_topic' forum.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-default" type="submit">submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+

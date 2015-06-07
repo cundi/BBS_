@@ -1,0 +1,85 @@
+{% extends 'common/base.html' %}
+
+{% block header_ext %}
+    {{ form.media }}
+{% endblock %}
+
+{% block navbar %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block panel_heading %}
+
+    <div class="panel-heading" style="height: 79px">
+        <h3 class="panel-title">版面导航</h3>
+        <a href="{% url 'bb:index' %}">首页</a>
+        <em>> </em>
+        <a href="{% url 'bb:category_view' t_forum.category.id %}">{{ t_forum.category.title }}</a>
+        <em>> </em>
+        <a href="{% url 'bb:forum_view' t_forum.id %}">{{ t_forum.title }}</a>
+        <span id="create_topic">
+            <a id="post_topic" href="{% url 'bb:create_topic' t_forum.id %}">发新贴</a>
+        </span>
+    </div>
+{% endblock %}
+
+
+{% block panel_body %}
+    <div class="panel-body" style="margin-left: -11px;margin-right: -11px">
+        <div>
+            {% if topic %}
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>作者：{{ topic.author }}</td>
+                    </tr>
+                    <tr>
+                        <td>发帖内容： {{ topic.content|safe }}</td>
+                    </tr>
+                    <tr>
+                        <td>发帖时间：{{ topic.time_created }}</td>
+                    </tr>
+                    <tr>
+                        <td>阅读次数：{{ topic.view_count }}</td>
+                    </tr>
+                    {% for p in posts %}
+                        <tr>
+                            <td>帖子回复内容：{{ p }}</td>
+                        </tr>
+                        <tr>
+                            <td>回帖作者：{{ p.user }}</td>
+                        </tr>
+                        <tr>
+                            <td>回帖时间：{{ p.time_created }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block panel_paganation %}
+    {% if request.user.is_authenticated %}
+        <div class="panel-footer" style="background-color: #f5f7fa">
+            <form method="post" action="{% url 'bb:create_topic_reply' topic.id %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-info" type="submit">create a now topic</button>
+            </form>
+        </div>
+    {% else %}
+        <div style="border-style: solid; border-width: 1px; border-color: #d3d3d3">
+            您需要登录后才可以回帖<a href="{% url 'user:sign_in' %}">登录</a> | <a href="{% url 'user:sign_up' %}">注册</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block panel_footer %}
+    {% include 'common/footer.html' %}
+{% endblock %}

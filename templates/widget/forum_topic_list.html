@@ -39,7 +39,7 @@
         {% with  topics  as tp %}
             {% for t in tp %}
         <tr>
-            <td><a href="{% url 'bbs:topic_view' t.id %}">{{ t.title }}</a></td>
+            <td><a href="{% url 'bb:topic_view' t.id %}">{{ t.title }}</a></td>
         </tr>
             {% endfor %}
         {% endwith %}

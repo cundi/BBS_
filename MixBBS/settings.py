@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for BBS project.
 
@@ -38,14 +39,15 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'bb',
     'accounts',
+    'bb',
+    'blog',
     'tool_bar',
     'pagination',
-    'django_wysiwyg',
     'DjangoUeditor',
-    'templatetags',
+    'utils.templatetags',
     'debug_toolbar',
+    'utils',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -145,10 +147,8 @@ SERVER_EMAIL = EMAIL_HOST_USER
 
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
-# custom settings
-# "If ``True``, when users create an accounts, they will "
-#   "not be enabled by default and a staff member will need to activate "
-#    "their accounts in the admin interface."
+
+# 如果用户创建账户时，值为真则注册的账户默认为非启用状态，并需要邮件激活
 ACCOUNT_APPROVAL_REQUIRED = False
 
 UPLOAD_PATH = os.path.join(BASE_DIR, 'static/upload')

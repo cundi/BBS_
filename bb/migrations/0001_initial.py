@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import DjangoUeditor.models
 from django.conf import settings
 
 
@@ -42,14 +43,14 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=200)),
-                ('avatar', models.ImageField(upload_to='deepinbbs/img/', verbose_name='\u677f\u5757\u5934\u50cf')),
+                ('avatar', models.ImageField(upload_to=b'', null=True, verbose_name='\u677f\u5757\u5934\u50cf', blank=True)),
                 ('description', models.CharField(max_length=300, null=True, blank=True)),
-                ('created', models.DateTimeField(verbose_name='creation date and time', editable=False)),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='creation date and time')),
                 ('post_count', models.IntegerField(default=0, verbose_name='\u56de\u5e16\u8ba1\u6570', blank=True)),
                 ('topic_count', models.IntegerField(default=0, verbose_name='\u5e16\u5b50\u8ba1\u6570', blank=True)),
                 ('hidden', models.BooleanField(default=False, verbose_name='\u5206\u533a\u662f\u5426\u9690\u85cf')),
-                ('category', models.ForeignKey(related_name='forums', verbose_name='Category', to='bb.Category')),
-                ('forum_admin', models.ManyToManyField(related_name='manager', verbose_name='\u7248\u4e3b', to=settings.AUTH_USER_MODEL, blank=True)),
+                ('category', models.ForeignKey(verbose_name='Category', blank=True, to='bb.Category', null=True)),
+                ('forum_admin', models.ForeignKey(related_name='manager', verbose_name='\u7248\u4e3b', blank=True, to=settings.AUTH_USER_MODEL)),
                 ('parent', models.ForeignKey(related_name='child_forums', verbose_name='Parent forum', blank=True, to='bb.Forum', null=True)),
             ],
             options={
@@ -84,12 +85,12 @@ class Migration(migrations.Migration):
             name='Post',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('content', models.TextField()),
-                ('content_rendered', models.TextField()),
+                ('content', DjangoUeditor.models.UEditorField(blank=True)),
                 ('time_created', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('updated', models.DateTimeField(null=True, verbose_name='\u56de\u5e16\u6700\u540e\u7f16\u8f91\u65f6\u95f4', blank=True)),
                 ('user_ip', models.GenericIPAddressField(default='0.0.0.0', null=True, verbose_name='\u53d1\u5e16\u4ebaIP\u5730\u5740')),
                 ('deleted', models.BooleanField(default=False)),
+                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['time_created'],
@@ -100,7 +101,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=100, null=True, blank=True)),
-                ('content', models.TextField()),
+                ('content', DjangoUeditor.models.UEditorField(verbose_name='\u5185\u5bb9', blank=True)),
                 ('content_rendered', models.TextField(null=True, blank=True)),
                 ('view_count', models.IntegerField(default=0)),
                 ('reply_count', models.IntegerField(default=0)),
@@ -112,8 +113,8 @@ class Migration(migrations.Migration):
                 ('is_top', models.BooleanField(default=False)),
                 ('order', models.IntegerField(default=10)),
                 ('deleted', models.BooleanField(default=False)),
-                ('author', models.ForeignKey(verbose_name='topic_user', to=settings.AUTH_USER_MODEL)),
-                ('forum', models.ForeignKey(verbose_name='Forum of topic', to='bb.Forum')),
+                ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('forum', models.ForeignKey(verbose_name='forum of topic', to='bb.Forum')),
                 ('subscribers', models.ManyToManyField(related_name='subscriptions', verbose_name='\u8ba2\u9605\u4eba', to=settings.AUTH_USER_MODEL, blank=True)),
             ],
             options={
@@ -124,11 +125,6 @@ class Migration(migrations.Migration):
             model_name='post',
             name='topic',
             field=models.ForeignKey(to='bb.Topic'),
-        ),
-        migrations.AddField(
-            model_name='post',
-            name='user',
-            field=models.ForeignKey(related_name='posts', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='notification',

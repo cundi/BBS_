@@ -1,18 +1,24 @@
-{% extends 'common/base.html' %}
 
-{% load bootstrap %}
-{% load i18n %}
 
 {% block inside_row %}
-    <div class="panel panel-default col-md-6 col-md-offset-3">
-        <form class="panel-body" role="form" method="post" action="{% url 'user:signup' %}">
-            <h2>{% trans 'register'%}</h2>
-            {% csrf_token %}
-            {{ form|bootstrap }}
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Sign_Up</button>
-        </div>
-        </form>
+<div id="main" class="container">
+    <div class="register">
+    <form action="" method="POST">
+    <div class="title">新用户注册</div><div class="msg" id="msg"></div>
+    <input name="_token" type="hidden" value="qsRXJxSkfWJhdSlMMDkogm0V7JpX0uVjgyvvGdDv">
+    <input required="required" value="" class="txt uname" name="username" placeholder="输入4~15位用户名" type="text">
+    <input required="required" class="txt pwd" name="password" placeholder="输入8-20位密码" type="password">
+    <input required="required" class="txt repwd" name="confirm_password" placeholder="重复密码" type="password">
+    <input required="required" value="" class="txt email" name="email" placeholder="输入邮箱地址" type="email">
+    <div class="readme" style="display: none;">
+        <input type="checkbox" name="accepted" checked>
+        <span class="agreement">同意deepin协议</span>
+        <span class="already">已有账号?<a class="forget" href="http://u.deepin.org/pass/signin">登录</a></span>
     </div>
+    <input class="btn signup" type="submit" value="注册">
+    <a class="forget" href="http://u.deepin.org/pass/signin">已有账号? 登录</a>
+    </form>
+</div>
+</div>
 
 {% endblock %}

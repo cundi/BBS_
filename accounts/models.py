@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+from django.utils.crypto import get_random_string
 from bb.models import Topic
 
 
 
-class ForumProfile(models.Model):
-    user = models.OneToOneField(User)
+class ForumProfile(AbstractBaseUser):
     nickname = models.CharField(max_length=12, blank=True, null=True)
+    verified = models.BooleanField(verbose_name=_('verified'), default=False)
+    sent = models.DateTimeField(verbose_name=_('sent'), null=True)
+    key = models.CharField(verbose_name=_('key'), max_length=64, unique=True)
     user_avatar = models.BooleanField(default=True)
     avatar_img = models.ImageField(
-        blank=True, null=True, upload_to='avatar', default='avatar/d_avatar.png')
+        blank=True, null=True, upload_to='avatar/', default='avatar/d_avatar.png')
     description = models.TextField(null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)

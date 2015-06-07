@@ -17,7 +17,7 @@ from utils.email import send_approve_mail, send_verification_mail, next_url
 
 
 def index(request):
-    return render(request, 'bbs/index.html')
+    return render(request, 'bb/index.html')
 
 
 def user_signup(request):
@@ -48,8 +48,8 @@ def user_signup(request):
         if password != password2 or password == '' or password2 == '':
             error_msg.append('两次输入不匹配，或者为空')
             return render(request, 'account/signup.html', {'error': error_msg})
-        # 注册成功后重定向到首页
         new_user = User.objects.create_user(username, email ,password)
+
         if not new_user.is_active:
             if settings.ACCOUNT_APPROVAL_REQUIRED:
                 send_approve_mail(request, new_user)
@@ -57,7 +57,7 @@ def user_signup(request):
             else:
                 send_verification_mail(request, new_user, "注册验证")
                 info(request, "验证链接邮件已经发送")
-            return redirect(next_url(request) or "/")
+            return redirect(next_url(request) or "/") # 注册成功后重定向到首页
         else:
             info(request, "已经成功注册")
             return HttpResponseRedirect(reverse('accounts'))

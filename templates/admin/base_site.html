@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | MixBBS site admin {% endblock %}
+
+{% block extrastyle %}
+    <style>
+    h1{
+        color: #d13084;
+    }
+        #header{
+            background-color: #3d987f;
+        }
+        #branding>h1>a:visited{
+            color: azure;
+        }
+    .module h2, .module caption, .inline-group h2{
+        background: #3d987f !important;
+        font-size: 16px;
+    }
+    </style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">MixBBS administration</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

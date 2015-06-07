@@ -1,0 +1,61 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+
+{% block navbar %}
+    {% include 'common/navbar.html' %}
+{% endblock %}
+
+{% block panel_heading %}
+    {% include 'common/panel_heading.html' %}
+{% endblock %}
+
+{% block panel_body %}
+    <div class="panel-body" style="height: 1000px;  margin-left: -11px;margin-right: -11px">
+        {% for c in cf %}
+        <div class="bm bmw flg cl">
+            <div class="bm_h cl">
+                <h2>
+                    <a href="{% url 'bb:category_view' c.id %}">{{ c.title }}</a>
+                </h2>
+            </div>
+
+            {% for forum in c.forum_set.all %}
+            <div id="category_" class="bm_c">
+                <table cellpadding="0" cellspacing="0" class="fl_tb">
+                    <tbody>
+                        <tr>
+                            <td class="" width="49.9%">
+                                <div class="fl_icn_g" style="width: 65px;">
+                                    <a href="{% url 'bb:forum_view' forum.id %}">
+                                        <img src="/media/{{ forum.avatar }}" align="left" alt="">
+                                    </a>
+                                </div>
+                                <dl style="margin-left: 65px">
+                                    <dt>
+                                        <a href="{% url 'bb:forum_view' forum.id %}">{{ forum }}</a>
+                                        <em class="xw0 xi1" title="">{{ forum.count }}</em>
+                                    </dt>
+                                    <dd>{{ forum.description }}</dd>
+                                    <dd>
+                                        <em>
+                                            主题：{{ forum.topic_count }} ,
+                                        </em>
+                                        <em>
+                                            帖子数量：
+                                            <span>0, </span>
+                                        </em>
+                                        <em>点击数: <span></span></em>
+                                    </dd>
+                                </dl>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% empty %}
+                <p>请检查，没有关联到category的forum外键</p>
+            {% endfor %}
+        {% endfor  %}
+        </div>
+    </div>
+{% endblock %}
