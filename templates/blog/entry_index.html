@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>文章索引</title>
+</head>
+<body>
+    <h1>Entries index</h1>
+    {% for entry in entry_list %}
+        <h2>{{ entry.title }}</h2>
+        <p>Published on {{ entry.pub_date|date:"F j, Y" }}</p>
+        {% if entry.body %}
+            {{ entry.body|truncatewords_html:"50"|safe }}
+        {% endif %}
+        <p><a href="{{ entry.get_absolute_url }}">Read full entry</a></p>
+    {% endfor %}
+</body>
+</html>

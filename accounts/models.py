@@ -4,16 +4,21 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.utils.crypto import get_random_string
 from bb.models import Topic
 
 
-
-class ForumProfile(AbstractBaseUser):
-    nickname = models.CharField(max_length=12, blank=True, null=True)
+class SiteUserProfile(AbstractBaseUser):
     verified = models.BooleanField(verbose_name=_('verified'), default=False)
     sent = models.DateTimeField(verbose_name=_('sent'), null=True)
     key = models.CharField(verbose_name=_('key'), max_length=64, unique=True)
+
+
+class BlogProfile(SiteUserProfile):
+    pass
+
+
+class ForumProfile(SiteUserProfile):
+    nickname = models.CharField(max_length=12, blank=True, null=True)
     user_avatar = models.BooleanField(default=True)
     avatar_img = models.ImageField(
         blank=True, null=True, upload_to='avatar/', default='avatar/d_avatar.png')
@@ -22,8 +27,7 @@ class ForumProfile(AbstractBaseUser):
     phone = models.CharField(max_length=11, null=True, blank=True)
     born_date = models.DateField(
         verbose_name=u'出生日期', null=True, blank=True, default=None)
-    date_created = models.DateField(
-        null=True, blank=True, verbose_name=u'账户创建日期', auto_now_add=True)
+
     favorite = models.ManyToManyField(
         Topic, verbose_name='fav_user', related_name='fav', blank=True)
     vote = models.ManyToManyField(
@@ -78,6 +82,10 @@ class ForumProfile(AbstractBaseUser):
             for reply in replys:
                 all_replys.append(reply)
             return all_replys
+
+    def born_in_fifities(self):
+        return self.born_date.strftime('%Y')[:3] == '195'
+    born_in_fifities.boolean = True
 
 
 class Social(models.Model):

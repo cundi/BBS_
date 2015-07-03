@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'accounts',
     'bb',
-    'blog',
     'tool_bar',
     'pagination',
     'DjangoUeditor',
@@ -133,6 +132,7 @@ MEDIA_URL = '/media/'
 #
 # CKEDITOR_UPLOAD_PATH = "uploads/"
 
+LOGIN_REDIRECT_URL = '/'
 
 MAX_UPLOAD_SIZE = "524288"
 
@@ -152,6 +152,8 @@ LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 ACCOUNT_APPROVAL_REQUIRED = False
 
 UPLOAD_PATH = os.path.join(BASE_DIR, 'static/upload')
+
+DEFAULT_WEBSITE_URL = "http://www.example.com"
 
 from django.core.files.storage import FileSystemStorage
 storage = FileSystemStorage(

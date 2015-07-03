@@ -11,13 +11,13 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 
 from accounts.models import ForumProfile
-from .models import Forum, Topic, Post, Category, Appendix
+from .models import Forum, Topic, Post, Category
 from .forms import ImageUploadForm, TopicUEditorForm, PostReplyForm
 
 
 today = datetime.date.today()
-today_tc = Topic.objects.filter(time_created__day=today.day).count()
-yesterday_tc = Topic.objects.filter(time_created__day=today.day - 1).count()
+today_tc = Topic.objects.filter(created__day=today.day).count()
+yesterday_tc = Topic.objects.filter(created__day=today.day - 1).count()
 categories = Category.objects.all()
 forums = Forum.objects.all()
 forum = Forum()
@@ -63,7 +63,7 @@ def upload_pic(request, pk):
     return HttpResponseForbidden('allowed only via POST')
 
 
-def category_view(request, category_id):
+def category_details(request, category_id):
     category = Category.objects.get(id=category_id)
     ctx = {
         'category_single': category, 'today_topics_count': today_tc, 'yesterday_topics_count': yesterday_tc,

@@ -13,6 +13,7 @@ urlpatterns = [
                   url(r'^$', index, name='index'),
                   url(r'^user/', include('accounts.urls', namespace='user')),
                   url(r'^bb/', include('bb.urls', namespace='bb')),
+                  url(r'^blog/', include('blog.urls', namespace='blog')),
                   url(r'^toolbar/', include('tool_bar.urls', namespace='toolbar')),
                   url(r'^ueditor/', include('DjangoUeditor.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
